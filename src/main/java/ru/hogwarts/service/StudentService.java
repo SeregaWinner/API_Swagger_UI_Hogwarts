@@ -36,13 +36,13 @@ public class StudentService {
         return students.remove(id);
     }
 
-//    public Collection<StudentsHogwarts> findByAge(int age) {
-//        ArrayList<StudentsHogwarts> result = new ArrayList<>();
-//        for (StudentsHogwarts student : students.values()) {
-//            if (student.getAge() == age) {
-//                result.add(student);
-//            }
-//        }
-//        return result;
-//    }
+    public Collection<StudentsHogwarts> findByAge(int age) {
+        ArrayList<StudentsHogwarts> result = new ArrayList<>();
+        for (StudentsHogwarts student : students.values()) {
+            if (student.getAge() == age) {
+                result.add(student);
+            }
+        }
+        return result;
+    }
 }

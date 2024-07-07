@@ -41,18 +41,18 @@ public class StudentController {
         return ResponseEntity.ok(foundStudent);
     }
 
-//    @DeleteMapping
-//    public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
-//        studentService.deleteStudent(id);
-//        return ResponseEntity.ok().build();
-//    }
-//
-//    @GetMapping
-//    public ResponseEntity<Collection<StudentsHogwarts>> findStudents(@RequestParam(required = false) int age) {
-//        if (age > 0) {
-//            return ResponseEntity.ok(studentService.findByAge(age));
-//        }
-//        return ResponseEntity.ok(Collections.emptyList());
-//    }
+    @DeleteMapping
+    public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
+        studentService.deleteStudent(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<Collection<StudentsHogwarts>> findStudents(@RequestParam(required = false) int age) {
+        if (age > 0) {
+            return ResponseEntity.ok(studentService.findByAge(age));
+        }
+        return ResponseEntity.ok(Collections.emptyList());
+    }
 
 }

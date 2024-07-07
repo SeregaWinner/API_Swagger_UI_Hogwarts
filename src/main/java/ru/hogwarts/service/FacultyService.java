@@ -28,17 +28,17 @@ public class FacultyService {
         return faculty;
     }
 
-//    public FacultyHogwarts deleteFaculty(long id) {
-//        return studentsFaculty.remove(id);
-//    }
-//
-//    public Collection<FacultyHogwarts> findByColor(String color) {
-//        ArrayList<FacultyHogwarts> result = new ArrayList<>();
-//        for (FacultyHogwarts faculty : studentsFaculty.values()) {
-//            if (Objects.equals(faculty.getColor(), color)) {
-//                result.add(faculty);
-//            }
-//        }
-//        return result;
-//    }
+    public FacultyHogwarts deleteFaculty(long id) {
+        return studentsFaculty.remove(id);
+    }
+
+    public Collection<FacultyHogwarts> findByColor(String color) {
+        ArrayList<FacultyHogwarts> result = new ArrayList<>();
+        for (FacultyHogwarts faculty : studentsFaculty.values()) {
+            if (Objects.equals(faculty.getColor(), color)) {
+                result.add(faculty);
+            }
+        }
+        return result;
+    }
 }
