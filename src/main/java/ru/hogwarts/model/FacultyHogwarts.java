@@ -3,9 +3,9 @@ package ru.hogwarts.model;
 import java.util.Objects;
 
 public class FacultyHogwarts {
-    private  Long id;
-    private  String name;
-    private  String color;
+    private Long id;
+    private String name;
+    private String color;
 
     public FacultyHogwarts(Long id, String name, String color) {
         this.id = id;
