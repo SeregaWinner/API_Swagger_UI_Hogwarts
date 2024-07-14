@@ -1,16 +1,24 @@
-package ru.hogwarts.model;
+package ru.hogwarts.entity;
+
+import jakarta.persistence.*;
 
 import java.util.Objects;
-
-public class FacultyHogwarts {
+@Entity
+@Table(name = "students")
+public class Students {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String color;
+    private int age;
 
-    public FacultyHogwarts(Long id, String name, String color) {
+    public Students(Long id, String name, int age) {
         this.id = id;
         this.name = name;
-        this.color = color;
+        this.age = age;
+    }
+
+    public Students() {
     }
 
     public Long getId() {
@@ -21,8 +29,8 @@ public class FacultyHogwarts {
         return name;
     }
 
-    public String getColor() {
-        return color;
+    public int getAge() {
+        return age;
     }
 
     public void setId(Long id) {
@@ -33,14 +41,14 @@ public class FacultyHogwarts {
         this.name = name;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public void setAge(int age) {
+        this.age = age;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof FacultyHogwarts that)) return false;
+        if (!(o instanceof Students that)) return false;
         return Objects.equals(id, that.id);
     }
 
@@ -51,10 +59,10 @@ public class FacultyHogwarts {
 
     @Override
     public String toString() {
-        return "FacultyHogwarts{" +
+        return "StudentsHogwarts{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", color='" + color + '\'' +
+                ", age=" + age +
                 '}';
     }
 }

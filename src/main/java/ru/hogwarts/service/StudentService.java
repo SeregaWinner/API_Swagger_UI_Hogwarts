@@ -1,7 +1,8 @@
 package ru.hogwarts.service;
 
 import org.springframework.stereotype.Service;
-import ru.hogwarts.model.StudentsHogwarts;
+import ru.hogwarts.exception.StudentNotFoundException;
+import ru.hogwarts.entity.Students;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,35 +11,41 @@ import java.util.Map;
 
 @Service
 public class StudentService {
-    private final Map<Long, StudentsHogwarts> students = new HashMap<>();
-    private long lastId = 0;
+    private final Map<Long, Students> students = new HashMap<>();
+    private long lastId = 1;
 
 
-    public StudentsHogwarts addStudent(StudentsHogwarts student) {
+    public Students addStudent(Students student) {
         student.setId(lastId++);
         students.put(student.getId(), student);
         return student;
     }
 
-    public StudentsHogwarts findStudent(long id) {
+    public Students findStudent(long id) {
+        if (!students.containsKey(id)) {
+            throw new StudentNotFoundException(id);
+        }
         return students.get(id);
     }
 
-    public StudentsHogwarts editStudent(StudentsHogwarts student) {
-        if (!students.containsKey(student.getId())) {
-            return null;
+    public void editStudent(long id, Students student) {
+        if (!students.containsKey(id)) {
+            throw new StudentNotFoundException(id);
         }
-        students.put(student.getId(), student);
-        return student;
+        student.setId(id);
+        students.replace(id, student);
     }
 
-    public StudentsHogwarts deleteStudent(long id) {
+    public Students deleteStudent(long id) {
+        if (!students.containsKey(id)) {
+            throw new StudentNotFoundException(id);
+        }
         return students.remove(id);
     }
 
-    public Collection<StudentsHogwarts> findByAge(int age) {
-        ArrayList<StudentsHogwarts> result = new ArrayList<>();
-        for (StudentsHogwarts student : students.values()) {
+    public Collection<Students> findByAge(int age) {
+        ArrayList<Students> result = new ArrayList<>();
+        for (Students student : students.values()) {
             if (student.getAge() == age) {
                 result.add(student);
             }
