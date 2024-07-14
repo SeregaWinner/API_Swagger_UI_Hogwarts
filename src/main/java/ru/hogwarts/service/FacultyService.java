@@ -11,45 +11,38 @@ import java.util.*;
 public class FacultyService {
 
     private final FacultyRepository facultyRepository;
+
     public FacultyService(FacultyRepository facultyRepository) {
         this.facultyRepository = facultyRepository;
     }
 
     public Faculty addFaculty(Faculty faculty) {
-        faculty.setId(lastId++);
-        faculties.put(faculty.getId(), faculty);
-        return faculty;
+        faculty.setId(null);
+        return facultyRepository.save(faculty);
     }
 
-    public Faculty findFaculty(long id) {
-        if (!faculties.containsKey(id)) {
-            throw new FucultyNotFoundException(id);
-        }
-        return faculties.get(id);
+    public Faculty getFaculty(long id) {
+        return facultyRepository.findById(id).
+                orElseThrow(() -> new FucultyNotFoundException(id));
     }
 
     public void editFaculty(long id, Faculty faculty) {
-        if (!faculties.containsKey(id)) {
-            throw new FucultyNotFoundException(id);
-        }
-        faculty.setId(id);
-        faculties.replace(id, faculty);
+        Faculty oldFaculty = facultyRepository.findById(id).
+                orElseThrow(() -> new FucultyNotFoundException(id));
+        oldFaculty.setName(faculty.getName());
+        oldFaculty.setColor(faculty.getColor());
+        facultyRepository.save(oldFaculty);
     }
 
     public Faculty deleteFaculty(long id) {
-        if (!faculties.containsKey(id)) {
-            throw new FucultyNotFoundException(id);
-        }
-        return faculties.remove(id);
+        Faculty faculty = facultyRepository.findById(id).
+                orElseThrow(() -> new FucultyNotFoundException(id));
+        facultyRepository.delete(faculty);
+        return faculty;
     }
 
-    public Collection<Faculty> findByColor(String color) {
-        ArrayList<Faculty> result = new ArrayList<>();
-        for (Faculty faculty : faculties.values()) {
-            if (Objects.equals(faculty.getColor(), color)) {
-                result.add(faculty);
-            }
-        }
-        return result;
+    public List<Faculty> findByColor(String color) {
+        return facultyRepository.findAllByColor(color);
+
     }
 }

@@ -3,22 +3,23 @@ package ru.hogwarts.entity;
 import jakarta.persistence.*;
 
 import java.util.Objects;
+
 @Entity
 @Table(name = "students")
-public class Students {
+public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private int age;
 
-    public Students(Long id, String name, int age) {
+    public Student(Long id, String name, int age) {
         this.id = id;
         this.name = name;
         this.age = age;
     }
 
-    public Students() {
+    public Student() {
     }
 
     public Long getId() {
@@ -48,7 +49,7 @@ public class Students {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Students that)) return false;
+        if (!(o instanceof Student that)) return false;
         return Objects.equals(id, that.id);
     }
 

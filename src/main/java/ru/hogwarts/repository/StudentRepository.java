@@ -1,7 +1,10 @@
 package ru.hogwarts.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.hogwarts.entity.Students;
+import ru.hogwarts.entity.Student;
 
-public interface StudentRepository extends JpaRepository<Students, Long> {
+import java.util.List;
+
+public interface StudentRepository extends JpaRepository<Student, Long> {
+    List<Student> findAllByAge(int age);
 }
