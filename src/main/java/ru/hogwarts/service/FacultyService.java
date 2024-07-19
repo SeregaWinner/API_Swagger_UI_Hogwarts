@@ -1,9 +1,11 @@
 package ru.hogwarts.service;
 
 import org.springframework.stereotype.Service;
+import ru.hogwarts.entity.Student;
 import ru.hogwarts.exception.FucultyNotFoundException;
 import ru.hogwarts.entity.Faculty;
 import ru.hogwarts.repository.FacultyRepository;
+import ru.hogwarts.repository.StudentRepository;
 
 import java.util.*;
 
@@ -11,9 +13,11 @@ import java.util.*;
 public class FacultyService {
 
     private final FacultyRepository facultyRepository;
+    private final StudentRepository studentRepository;
 
-    public FacultyService(FacultyRepository facultyRepository) {
+    public FacultyService(FacultyRepository facultyRepository, StudentRepository studentRepository) {
         this.facultyRepository = facultyRepository;
+        this.studentRepository = studentRepository;
     }
 
     public Faculty addFaculty(Faculty faculty) {
@@ -44,5 +48,13 @@ public class FacultyService {
     public List<Faculty> findByColor(String color) {
         return facultyRepository.findAllByColor(color);
 
+    }
+
+    public Collection<Faculty> findByColorOrName(String colorOrName) {
+        return facultyRepository.findAllByColorIgnoreCaseOrNameIgnoreCase(colorOrName,colorOrName);
+    }
+
+    public List<Student> findStudentsByFacultyId(long id) {
+        return studentRepository.findAllByFaculty_ID(id);
     }
 }
