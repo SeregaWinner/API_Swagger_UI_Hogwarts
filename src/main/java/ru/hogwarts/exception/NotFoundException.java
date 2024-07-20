@@ -1,6 +1,6 @@
 package ru.hogwarts.exception;
 
-public abstract class NotFoundException extends RuntimeException{
+public abstract class NotFoundException extends RuntimeException {
     private long id;
 
     public NotFoundException(long id) {
