@@ -1,40 +1,51 @@
 package ru.hogwarts.service;
 
 import org.springframework.stereotype.Service;
-import ru.hogwarts.model.FacultyHogwarts;
+import ru.hogwarts.exception.FucultyNotFoundException;
+import ru.hogwarts.entity.Faculty;
+import ru.hogwarts.repository.FacultyRepository;
 
 import java.util.*;
 
 @Service
 public class FacultyService {
-    private final Map<Long, FacultyHogwarts> studentsFaculty = new HashMap<>();
-    private long lastId = 0;
 
-    public FacultyHogwarts addFaculty(FacultyHogwarts faculty) {
+    private final FacultyRepository facultyRepository;
+    public FacultyService(FacultyRepository facultyRepository) {
+        this.facultyRepository = facultyRepository;
+    }
+
+    public Faculty addFaculty(Faculty faculty) {
         faculty.setId(lastId++);
-        studentsFaculty.put(faculty.getId(), faculty);
+        faculties.put(faculty.getId(), faculty);
         return faculty;
     }
 
-    public FacultyHogwarts findFaculty(long id) {
-        return studentsFaculty.get(id);
-    }
-
-    public FacultyHogwarts editFaculty(FacultyHogwarts faculty) {
-        if (!studentsFaculty.containsKey(faculty.getId())) {
-            return null;
+    public Faculty findFaculty(long id) {
+        if (!faculties.containsKey(id)) {
+            throw new FucultyNotFoundException(id);
         }
-        studentsFaculty.put(faculty.getId(), faculty);
-        return faculty;
+        return faculties.get(id);
     }
 
-    public FacultyHogwarts deleteFaculty(long id) {
-        return studentsFaculty.remove(id);
+    public void editFaculty(long id, Faculty faculty) {
+        if (!faculties.containsKey(id)) {
+            throw new FucultyNotFoundException(id);
+        }
+        faculty.setId(id);
+        faculties.replace(id, faculty);
     }
 
-    public Collection<FacultyHogwarts> findByColor(String color) {
-        ArrayList<FacultyHogwarts> result = new ArrayList<>();
-        for (FacultyHogwarts faculty : studentsFaculty.values()) {
+    public Faculty deleteFaculty(long id) {
+        if (!faculties.containsKey(id)) {
+            throw new FucultyNotFoundException(id);
+        }
+        return faculties.remove(id);
+    }
+
+    public Collection<Faculty> findByColor(String color) {
+        ArrayList<Faculty> result = new ArrayList<>();
+        for (Faculty faculty : faculties.values()) {
             if (Objects.equals(faculty.getColor(), color)) {
                 result.add(faculty);
             }
