@@ -38,14 +38,14 @@ public class StudentController {
         return studentService.deleteStudent(id);
     }
 
-    @GetMapping(params = "aga")
+    @GetMapping(params = "age")
     public Collection<Student> findStudents(@RequestParam int age) {
         return studentService.findByAge(age);
     }
 
     @GetMapping(params = {"maxAge", "minAge"})
     public List<Student> filterByAgeRange(@RequestParam int minAge, @RequestParam int maxAge) {
-        return studentService.filterByAgeRange(maxAge, minAge);
+        return studentService.filterByAgeRange(minAge, maxAge);
     }
     @GetMapping("/{id}/faculty")
     public Faculty findStudentsFaculty(@PathVariable long id){

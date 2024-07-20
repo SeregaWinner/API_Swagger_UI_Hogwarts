@@ -22,9 +22,9 @@ public class StudentService {
 
     public Student addStudent(Student student) {
         Faculty faculty = null;
-        if(student.getFaculty()!= null && student.getFaculty().getId() != null){
-             faculty =facultyRepository.findById(student.getFaculty().getId())
-                    .orElseThrow(()-> new StudentNotFoundException(student.getFaculty().getId()));
+        if (student.getFaculty() != null && student.getFaculty().getId() != null) {
+            faculty = facultyRepository.findById(student.getFaculty().getId())
+                    .orElseThrow(() -> new StudentNotFoundException(student.getFaculty().getId()));
         }
         student.setFaculty(faculty);
         student.setId(null);
@@ -40,9 +40,9 @@ public class StudentService {
         Student oldStudent = studentRepository.findById(id).
                 orElseThrow(() -> new StudentNotFoundException(id));
         Faculty faculty = null;
-        if(student.getFaculty()!= null && student.getFaculty().getId() != null){
-            faculty =facultyRepository.findById(student.getFaculty().getId())
-                    .orElseThrow(()-> new StudentNotFoundException(student.getFaculty().getId()));
+        if (student.getFaculty() != null && student.getFaculty().getId() != null) {
+            faculty = facultyRepository.findById(student.getFaculty().getId())
+                    .orElseThrow(() -> new StudentNotFoundException(student.getFaculty().getId()));
         }
         oldStudent.setName(student.getName());
         oldStudent.setAge(student.getAge());
@@ -63,7 +63,7 @@ public class StudentService {
     }
 
     public List<Student> filterByAgeRange(int maxAge, int minAge) {
-        return studentRepository.findByAgeBetween(maxAge, minAge);
+        return studentRepository.findByAgeBetween(minAge, maxAge);
     }
 
     public Faculty findStudentsFaculty(long id) {
