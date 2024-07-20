@@ -1,44 +1,60 @@
 package ru.hogwarts.service;
 
 import org.springframework.stereotype.Service;
-import ru.hogwarts.model.FacultyHogwarts;
+import ru.hogwarts.entity.Student;
+import ru.hogwarts.exception.FucultyNotFoundException;
+import ru.hogwarts.entity.Faculty;
+import ru.hogwarts.repository.FacultyRepository;
+import ru.hogwarts.repository.StudentRepository;
 
 import java.util.*;
 
 @Service
 public class FacultyService {
-    private final Map<Long, FacultyHogwarts> studentsFaculty = new HashMap<>();
-    private long lastId = 0;
 
-    public FacultyHogwarts addFaculty(FacultyHogwarts faculty) {
-        faculty.setId(lastId++);
-        studentsFaculty.put(faculty.getId(), faculty);
+    private final FacultyRepository facultyRepository;
+    private final StudentRepository studentRepository;
+
+    public FacultyService(FacultyRepository facultyRepository, StudentRepository studentRepository) {
+        this.facultyRepository = facultyRepository;
+        this.studentRepository = studentRepository;
+    }
+
+    public Faculty addFaculty(Faculty faculty) {
+        faculty.setId(null);
+        return facultyRepository.save(faculty);
+    }
+
+    public Faculty getFaculty(long id) {
+        return facultyRepository.findById(id).
+                orElseThrow(() -> new FucultyNotFoundException(id));
+    }
+
+    public void editFaculty(long id, Faculty faculty) {
+        Faculty oldFaculty = facultyRepository.findById(id).
+                orElseThrow(() -> new FucultyNotFoundException(id));
+        oldFaculty.setName(faculty.getName());
+        oldFaculty.setColor(faculty.getColor());
+        facultyRepository.save(oldFaculty);
+    }
+
+    public Faculty deleteFaculty(long id) {
+        Faculty faculty = facultyRepository.findById(id).
+                orElseThrow(() -> new FucultyNotFoundException(id));
+        facultyRepository.delete(faculty);
         return faculty;
     }
 
-    public FacultyHogwarts findFaculty(long id) {
-        return studentsFaculty.get(id);
+    public List<Faculty> findByColor(String color) {
+        return facultyRepository.findAllByColor(color);
+
     }
 
-    public FacultyHogwarts editFaculty(FacultyHogwarts faculty) {
-        if (!studentsFaculty.containsKey(faculty.getId())) {
-            return null;
-        }
-        studentsFaculty.put(faculty.getId(), faculty);
-        return faculty;
+    public Collection<Faculty> findByColorOrName(String colorOrName) {
+        return facultyRepository.findAllByColorIgnoreCaseOrNameIgnoreCase(colorOrName,colorOrName);
     }
 
-    public FacultyHogwarts deleteFaculty(long id) {
-        return studentsFaculty.remove(id);
-    }
-
-    public Collection<FacultyHogwarts> findByColor(String color) {
-        ArrayList<FacultyHogwarts> result = new ArrayList<>();
-        for (FacultyHogwarts faculty : studentsFaculty.values()) {
-            if (Objects.equals(faculty.getColor(), color)) {
-                result.add(faculty);
-            }
-        }
-        return result;
+    public List<Student> findStudentsByFacultyId(long id) {
+        return studentRepository.findAllByFaculty_ID(id);
     }
 }

@@ -1,48 +1,72 @@
 package ru.hogwarts.service;
 
 import org.springframework.stereotype.Service;
-import ru.hogwarts.model.StudentsHogwarts;
+import ru.hogwarts.entity.Faculty;
+import ru.hogwarts.entity.Student;
+import ru.hogwarts.exception.StudentNotFoundException;
+import ru.hogwarts.repository.FacultyRepository;
+import ru.hogwarts.repository.StudentRepository;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class StudentService {
-    private final Map<Long, StudentsHogwarts> students = new HashMap<>();
-    private long lastId = 0;
 
+    private final StudentRepository studentRepository;
+    private final FacultyRepository facultyRepository;
 
-    public StudentsHogwarts addStudent(StudentsHogwarts student) {
-        student.setId(lastId++);
-        students.put(student.getId(), student);
+    public StudentService(StudentRepository studentRepository, FacultyRepository facultyRepository) {
+        this.studentRepository = studentRepository;
+        this.facultyRepository = facultyRepository;
+    }
+
+    public Student addStudent(Student student) {
+        Faculty faculty = null;
+        if (student.getFaculty() != null && student.getFaculty().getId() != null) {
+            faculty = facultyRepository.findById(student.getFaculty().getId())
+                    .orElseThrow(() -> new StudentNotFoundException(student.getFaculty().getId()));
+        }
+        student.setFaculty(faculty);
+        student.setId(null);
+        return studentRepository.save(student);
+    }
+
+    public Student getStudent(long id) {
+        return studentRepository.findById(id).
+                orElseThrow(() -> new StudentNotFoundException(id));
+    }
+
+    public void editStudent(long id, Student student) {
+        Student oldStudent = studentRepository.findById(id).
+                orElseThrow(() -> new StudentNotFoundException(id));
+        Faculty faculty = null;
+        if (student.getFaculty() != null && student.getFaculty().getId() != null) {
+            faculty = facultyRepository.findById(student.getFaculty().getId())
+                    .orElseThrow(() -> new StudentNotFoundException(student.getFaculty().getId()));
+        }
+        oldStudent.setName(student.getName());
+        oldStudent.setAge(student.getAge());
+        oldStudent.setFaculty(faculty);
+        studentRepository.save(oldStudent);
+    }
+
+    public Student deleteStudent(long id) {
+        Student student = studentRepository.findById(id).
+                orElseThrow(() -> new StudentNotFoundException(id));
+        studentRepository.delete(student);
         return student;
     }
 
-    public StudentsHogwarts findStudent(long id) {
-        return students.get(id);
+    public List<Student> findByAge(int ege) {
+        return studentRepository.findAllByAge(ege);
+
     }
 
-    public StudentsHogwarts editStudent(StudentsHogwarts student) {
-        if (!students.containsKey(student.getId())) {
-            return null;
-        }
-        students.put(student.getId(), student);
-        return student;
+    public List<Student> filterByAgeRange(int maxAge, int minAge) {
+        return studentRepository.findByAgeBetween(minAge, maxAge);
     }
 
-    public StudentsHogwarts deleteStudent(long id) {
-        return students.remove(id);
-    }
-
-    public Collection<StudentsHogwarts> findByAge(int age) {
-        ArrayList<StudentsHogwarts> result = new ArrayList<>();
-        for (StudentsHogwarts student : students.values()) {
-            if (student.getAge() == age) {
-                result.add(student);
-            }
-        }
-        return result;
+    public Faculty findStudentsFaculty(long id) {
+        return getStudent(id).getFaculty();
     }
 }
