@@ -1,8 +1,13 @@
 package ru.hogwarts.controller;
 
+import org.springframework.data.util.Pair;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.entity.Faculty;
 import ru.hogwarts.entity.Student;
+import ru.hogwarts.service.AvatarService;
 import ru.hogwarts.service.StudentService;
 
 import java.util.Collection;
@@ -12,9 +17,11 @@ import java.util.List;
 @RequestMapping("/student")
 public class StudentController {
     private final StudentService studentService;
+    private final AvatarService avatarService;
 
-    public StudentController(StudentService studentService) {
+    public StudentController(StudentService studentService, AvatarService avatarService) {
         this.studentService = studentService;
+        this.avatarService = avatarService;
     }
 
 
@@ -43,13 +50,34 @@ public class StudentController {
         return studentService.findByAge(age);
     }
 
-    @GetMapping(params = {"maxAge", "minAge"})
+    @GetMapping(params = {"minAge", "maxAge"})
     public List<Student> filterByAgeRange(@RequestParam int minAge, @RequestParam int maxAge) {
         return studentService.filterByAgeRange(minAge, maxAge);
     }
+
     @GetMapping("/{id}/faculty")
-    public Faculty findStudentsFaculty(@PathVariable long id){
+    public Faculty findStudentsFaculty(@PathVariable long id) {
         return studentService.findStudentsFaculty(id);
+    }
+
+    @GetMapping("/{id}/avatar-from-db")
+    public ResponseEntity<byte[]> getAvatarFromDb(@PathVariable long id) {
+        return buildResponseEntity(avatarService.getAvatarFromDb(id));
+    }
+
+    @GetMapping("/{id}/avatar-from-fs")
+    public ResponseEntity<byte[]> getAvatarFromFs(@PathVariable long id) {
+        return buildResponseEntity(avatarService.getAvatarFromFs(id));
+    }
+
+    private ResponseEntity<byte[]> buildResponseEntity(Pair<byte[], String> pair) {
+        byte[] data = pair.getFirst();
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .contentLength(data.length)
+                .contentType(MediaType.parseMediaType(pair.getSecond()))
+                .body(data);
+
     }
 
 }
