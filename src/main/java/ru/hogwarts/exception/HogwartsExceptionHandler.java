@@ -10,6 +10,9 @@ public class HogwartsExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<String> hendleNotFoundException(NotFoundException exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+    }@ExceptionHandler(AvatarProcessingException.class)
+    public ResponseEntity<String> hendleAvatarProcessingException(NotFoundException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Не удалось получить аватар из запроса или из файла");
     }
 
 }
