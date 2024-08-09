@@ -3,6 +3,7 @@ package ru.hogwarts.service;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.entity.Faculty;
 import ru.hogwarts.entity.Student;
+import ru.hogwarts.exception.FacultyNotFoundException;
 import ru.hogwarts.exception.StudentNotFoundException;
 import ru.hogwarts.repository.FacultyRepository;
 import ru.hogwarts.repository.StudentRepository;
@@ -24,7 +25,7 @@ public class StudentService {
         Faculty faculty = null;
         if (student.getFaculty() != null && student.getFaculty().getId() != null) {
             faculty = facultyRepository.findById(student.getFaculty().getId())
-                    .orElseThrow(() -> new StudentNotFoundException(student.getFaculty().getId()));
+                    .orElseThrow(() -> new FacultyNotFoundException(student.getFaculty().getId()));
         }
         student.setFaculty(faculty);
         student.setId(null);
@@ -36,18 +37,18 @@ public class StudentService {
                 orElseThrow(() -> new StudentNotFoundException(id));
     }
 
-    public void editStudent(long id, Student student) {
+    public Student editStudent(long id, Student student) {
         Student oldStudent = studentRepository.findById(id).
                 orElseThrow(() -> new StudentNotFoundException(id));
         Faculty faculty = null;
         if (student.getFaculty() != null && student.getFaculty().getId() != null) {
             faculty = facultyRepository.findById(student.getFaculty().getId())
-                    .orElseThrow(() -> new StudentNotFoundException(student.getFaculty().getId()));
+                    .orElseThrow(() -> new FacultyNotFoundException(student.getFaculty().getId()));
         }
         oldStudent.setName(student.getName());
         oldStudent.setAge(student.getAge());
         oldStudent.setFaculty(faculty);
-        studentRepository.save(oldStudent);
+        return studentRepository.save(oldStudent);
     }
 
     public Student deleteStudent(long id) {
@@ -62,7 +63,7 @@ public class StudentService {
 
     }
 
-    public List<Student> filterByAgeRange(int maxAge, int minAge) {
+    public List<Student> filterByAgeRange(int minAge , int maxAge) {
         return studentRepository.findByAgeBetween(minAge, maxAge);
     }
 

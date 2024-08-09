@@ -39,15 +39,15 @@ public class AvatarService {
         try {
             byte[] data = multipartFile.getBytes();
             String extension = StringUtils.getFilenameExtension(multipartFile.getOriginalFilename());
-            Path avatarPath = path.resolve(UUID.randomUUID().toString() + "." + extension);
-            Files.write(avatarPath, data);
+            Path avatarPath = path.resolve(UUID.randomUUID() + "." + extension);
+//            Files.write(avatarPath, data);* проблема тут!!!
             Student student = studentRepository.findById(studentId)
                     .orElseThrow(() -> new StudentNotFoundException(studentId));
             Avatar avatar = avatarRepository.findByStudent_Id(studentId)
                     .orElseGet(Avatar::new);
             avatar.setStudent(student);
-            avatar.setData(data);
             avatar.setFileSize(data.length);
+            avatar.setData(data);
             avatar.setMediaType(multipartFile.getContentType());
             avatar.setFilePath(avatarPath.toString());
             avatarRepository.save(avatar);
