@@ -46,6 +46,10 @@ public class Faculty {
         this.color = color;
     }
 
+
+
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -58,12 +62,5 @@ public class Faculty {
         return Objects.hash(id);
     }
 
-    @Override
-    public String toString() {
-        return "FacultyHogwarts{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", color='" + color + '\'' +
-                '}';
-    }
+
 }

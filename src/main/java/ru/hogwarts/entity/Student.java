@@ -18,6 +18,9 @@ public class Student {
         this.name = name;
         this.age = age;
     }
+    @ManyToOne
+    @JoinColumn(name = "faculty_id")
+    private Faculty faculty;
 
     public Student() {
     }
@@ -46,6 +49,14 @@ public class Student {
         this.age = age;
     }
 
+    public Faculty getFaculty() {
+        return faculty;
+    }
+
+    public void setFaculty(Faculty faculty) {
+        this.faculty = faculty;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -58,12 +69,5 @@ public class Student {
         return Objects.hash(id);
     }
 
-    @Override
-    public String toString() {
-        return "StudentsHogwarts{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                '}';
-    }
+
 }
