@@ -5,7 +5,11 @@
 --5. Получить всех студентов упорядоченных по возрасту.
 
 SELECT * FROM hogwarts WHERE age BETWEEN 10 AND 20;
-SELECT name FROM hogwarts;
-SELECT * FROM hogwarts WHERE name LIKE '%о%';
-SELECT * FROM hogwarts WHERE age < id;
-SELECT * FROM hogwarts ORDER BY age;
+SELECT name FROM students;
+SELECT * FROM students WHERE name LIKE '%о%';
+SELECT * FROM students WHERE age < id;
+SELECT * FROM students ORDER BY age;
+select * from faculties
+SELECT count(*) AS count FROM students
+SELECT AVG(age) AS avg FROM students
+SELECT * FROM students ORDER BY id DESC LIMIT 5
