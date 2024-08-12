@@ -18,6 +18,7 @@ public class Student {
         this.name = name;
         this.age = age;
     }
+
     @ManyToOne
     @JoinColumn(name = "faculty_id")
     private Faculty faculty;
