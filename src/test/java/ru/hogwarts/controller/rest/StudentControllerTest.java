@@ -39,13 +39,13 @@ public class StudentControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    Faculty faculty1 = new Faculty(1L, "Гриффиндор", "красный");
-    Faculty faculty2 = new Faculty(2L, "Слизарин", "зеленый");
+    Faculty faculty1 = new Faculty(null, "Гриффиндор", "красный");
+    Faculty faculty2 = new Faculty(null, "Слизарин", "зеленый");
 
-    Student student1 = new Student(1L, "Гарри Поттер", 11);
-    Student student2 = new Student(2L, "Рон Узли", 12);
-    Student student3 = new Student(3L, "Драго Малфой", 11);
-    Student student4 = new Student(4L, "Седрик Дигори", 14);
+    Student student1 = new Student(null, "Гарри Поттер", 11);
+    Student student2 = new Student(null, "Рон Узли", 12);
+    Student student3 = new Student(null, "Драго Малфой", 11);
+    Student student4 = new Student(null, "Седрик Дигори", 14);
 
     @BeforeEach
     void init() {

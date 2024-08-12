@@ -2,6 +2,7 @@ package ru.hogwarts.service;
 
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -26,6 +28,8 @@ import java.util.UUID;
 public class AvatarService {
     private final StudentRepository studentRepository;
     private final AvatarRepository avatarRepository;
+    @Value("${application.avatars-dir-name}")
+    private String avatarsDirName;
     private final Path path;
 
     public AvatarService(AvatarRepository avatarRepository, StudentRepository studentRepository,
@@ -75,4 +79,9 @@ public class AvatarService {
 
     }
 
+    public List<Avatar> getAllAvatarsForPage(Integer pageNumber, Integer pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNumber-1,pageSize);
+        return avatarRepository.findAll(pageRequest).getContent();
+
+    }
 }

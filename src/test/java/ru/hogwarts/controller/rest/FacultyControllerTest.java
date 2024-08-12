@@ -40,8 +40,8 @@ class FacultyControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    Faculty faculty1 = new Faculty(1L, "Гриффиндор", "красный");
-    Faculty faculty2 = new Faculty(2L, "Слизорен", "зеленый");
+    Faculty faculty1 = new Faculty(null, "Гриффиндор", "красный");
+    Faculty faculty2 = new Faculty(null, "Слизорен", "зеленый");
 
     @BeforeEach
     void init() {
@@ -69,6 +69,7 @@ class FacultyControllerTest {
     void findFacultyByIdTest() {
         Optional<Faculty> expected = facultyRepository.findById(faculty1.getId());
         ResponseEntity<Faculty> response = restTemplate.getForEntity(buildUrl("/faculty/" + faculty1.getId()), Faculty.class);
+        System.out.println(response);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         Faculty faculty = response.getBody();
         assertThat(faculty).isNotNull();
@@ -162,7 +163,7 @@ class FacultyControllerTest {
     @Test
     @DisplayName("Вывод всех студентов с факультета")
     void findStudentsByFacultyIdTest() {
-        Long facultyId = 1L;
+        Long facultyId = faculty1.getId();
         Student student1 = new Student();
         student1.setName("Гермиона Гренджер");
         student1.setAge(12);
@@ -176,6 +177,7 @@ class FacultyControllerTest {
         List<Student> expected = new ArrayList<>();
         expected.add(student1);
         expected.add(student2);
+
         ResponseEntity<List<Student>> response = restTemplate.exchange(
                 buildUrl("/faculty/" + facultyId + "/students"),
                 HttpMethod.GET,

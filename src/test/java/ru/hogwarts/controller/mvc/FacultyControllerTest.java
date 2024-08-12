@@ -240,11 +240,10 @@ class FacultyControllerTest {
         facultyList.add(faculty3);
         when(facultyRepository.findAllByColorIgnoreCaseOrNameIgnoreCase(any(), any())).thenReturn(facultyList);
 
-        System.out.println(facultyList);
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/faculty?nameOrColor=" + nameOrColor)
+                        .get("/faculty?colorOrName=" + nameOrColor )
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+                        .content(objectMapper.writeValueAsString(facultyList)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0].color").value(color))

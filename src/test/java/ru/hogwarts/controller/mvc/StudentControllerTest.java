@@ -1,6 +1,7 @@
 package ru.hogwarts.controller.mvc;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,8 @@ public class StudentControllerTest {
     private AvatarService avatarService;
     @SpyBean
     private StudentService studentService;
+    @SpyBean
+    private ObjectMapper objectMapper;
 
     @Test
     @DisplayName("Создать студента")
@@ -55,7 +58,7 @@ public class StudentControllerTest {
         when(studentRepository.save(any())).thenReturn(student);
         mockMvc.perform(post("/student")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(student.toString()))
+                        .content(objectMapper.writeValueAsString(student)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value(student.getName()))
                 .andExpect(jsonPath("$.age").value(student.getAge()));
@@ -129,7 +132,7 @@ public class StudentControllerTest {
 
     @Test
     @DisplayName("Заменить студента по id")
-    void updateStudent() throws Exception {
+    void updateStudentTest() throws Exception {
         long id = 1L;
         Faculty faculty = new Faculty();
         faculty.setId(id);
@@ -149,13 +152,14 @@ public class StudentControllerTest {
         student2.setFaculty(faculty);
 
         when(studentRepository.findById(id)).thenReturn(Optional.of(student1));
+        when(facultyRepository.findById(id)).thenReturn(Optional.of(faculty));
 
-        mockMvc.perform(put("/student" + id)
+
+        mockMvc.perform(put("/student/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(student2.toString()))
+                        .content(objectMapper.writeValueAsString(student2)))
                 .andExpect(status().isOk());
         verify(studentRepository, times(1)).save(any());
-
     }
 
     @Test
@@ -182,7 +186,8 @@ public class StudentControllerTest {
 
         mockMvc.perform(put("/student/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(student2.toString()))
+
+                        .content(objectMapper.writeValueAsString(student2)))
                 .andExpect(result -> assertInstanceOf(StudentNotFoundException.class, result.getResolvedException()));
     }
 
@@ -211,7 +216,7 @@ public class StudentControllerTest {
 
         mockMvc.perform(put("/student/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(student2.toString()))
+                        .content(objectMapper.writeValueAsString(student2)))
                 .andExpect(result -> assertInstanceOf(FacultyNotFoundException.class, result.getResolvedException()));
     }
 

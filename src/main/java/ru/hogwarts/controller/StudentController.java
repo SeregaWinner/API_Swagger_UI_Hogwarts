@@ -74,6 +74,21 @@ public class StudentController {
         return buildResponseEntity(avatarService.getAvatarFromFs(id));
     }
 
+    @GetMapping("/count")
+    public long getCountStudents() {
+        return studentService.getCountStudents();
+    }
+
+    @GetMapping("/age-avg")
+    public double getAvgAgeStudents() {
+        return studentService.getAvgAgeStudents();
+    }
+
+    @GetMapping("/desc-five")
+    public List<Student> getDescFiveStudents() {
+        return studentService.getDescFiveStudents();
+    }
+
     private ResponseEntity<byte[]> buildResponseEntity(Pair<byte[], String> pair) {
         byte[] data = pair.getFirst();
         return ResponseEntity
