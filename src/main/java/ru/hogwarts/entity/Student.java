@@ -18,6 +18,7 @@ public class Student {
         this.name = name;
         this.age = age;
     }
+
     @ManyToOne
     @JoinColumn(name = "faculty_id")
     private Faculty faculty;
@@ -69,5 +70,21 @@ public class Student {
         return Objects.hash(id);
     }
 
-
+        @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", faculty=" + faculty +
+                '}';
+    }
+//    @Override
+//    public String toString() {
+//        return "{" +
+//                "" id ":" + id +
+//                "," name ":" + """+ name + """ +
+//                ", " age ":" + age +
+//                '}';
+//    }
 }

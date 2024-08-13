@@ -1,5 +1,8 @@
 package ru.hogwarts.controller;
 
+
+
+
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,8 +34,8 @@ public class StudentController {
     }
 
     @PutMapping("/{id}")
-    public void editStudent(@PathVariable long id, @RequestBody Student student) {
-        studentService.editStudent(id, student);
+    public Student editStudent(@PathVariable long id, @RequestBody Student student) {
+        return studentService.editStudent(id, student);
     }
 
     @GetMapping("/{id}")
@@ -50,7 +53,8 @@ public class StudentController {
         return studentService.findByAge(age);
     }
 
-    @GetMapping(params = {"minAge", "maxAge"})
+//    @GetMapping(params = {"minAge", "maxAge"})
+    @GetMapping("/minAge_maxAge")
     public List<Student> filterByAgeRange(@RequestParam int minAge, @RequestParam int maxAge) {
         return studentService.filterByAgeRange(minAge, maxAge);
     }
@@ -68,6 +72,21 @@ public class StudentController {
     @GetMapping("/{id}/avatar-from-fs")
     public ResponseEntity<byte[]> getAvatarFromFs(@PathVariable long id) {
         return buildResponseEntity(avatarService.getAvatarFromFs(id));
+    }
+
+    @GetMapping("/count")
+    public long getCountStudents() {
+        return studentService.getCountStudents();
+    }
+
+    @GetMapping("/age-avg")
+    public double getAvgAgeStudents() {
+        return studentService.getAvgAgeStudents();
+    }
+
+    @GetMapping("/desc-five")
+    public List<Student> getDescFiveStudents() {
+        return studentService.getDescFiveStudents();
     }
 
     private ResponseEntity<byte[]> buildResponseEntity(Pair<byte[], String> pair) {

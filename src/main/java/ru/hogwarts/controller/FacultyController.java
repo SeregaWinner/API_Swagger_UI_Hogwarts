@@ -49,7 +49,7 @@ public class FacultyController {
     }
 
     @GetMapping("/{id}/students")
-    public List<Student> findStudentsByacultyId(@PathVariable long id) {
+    public List<Student> findStudentsByFacultyId(@PathVariable long id) {
         return facultyService.findStudentsByFacultyId(id);
     }
 }
