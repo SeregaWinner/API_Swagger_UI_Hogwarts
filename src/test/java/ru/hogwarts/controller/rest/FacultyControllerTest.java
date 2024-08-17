@@ -9,12 +9,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import ru.hogwarts.controller.FacultyController;
 import ru.hogwarts.entity.Faculty;
 import ru.hogwarts.entity.Student;
+import ru.hogwarts.exception.FacultyNotFoundException;
 import ru.hogwarts.repository.FacultyRepository;
 import ru.hogwarts.repository.StudentRepository;
 
@@ -108,6 +110,13 @@ class FacultyControllerTest {
         assertThat(actual).isNotEqualTo(expected);
         assertThat(actual.getName()).isEqualTo(name);
         assertThat(actual.getColor()).isEqualTo(color);
+    }
+    @Test
+    @DisplayName("Редактирование факультета отсутствующего в базе")
+    public void updateFacultyTestNegative() {
+        long id =0;
+        ResponseEntity<Void> responseEntity = restTemplate.exchange(buildUrl("/faculty/" )+ id, HttpMethod.PUT, HttpEntity.EMPTY, Void.class);
+        assertThat(responseEntity.getBody()).isEqualTo(new FacultyNotFoundException(id));
     }
 
     @Test
