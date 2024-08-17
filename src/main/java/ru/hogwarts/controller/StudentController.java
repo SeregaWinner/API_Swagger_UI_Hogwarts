@@ -94,7 +94,6 @@ public class StudentController {
                 .contentLength(data.length)
                 .contentType(MediaType.parseMediaType(pair.getSecond()))
                 .body(data);
-
     }
 
 }
