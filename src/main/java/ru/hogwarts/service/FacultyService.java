@@ -73,4 +73,10 @@ public class FacultyService {
         logger.info("Was invoked method for \"findStudentsByFacultyId\"");
         return studentRepository.findAllByFaculty_Id(id);
     }
+
+    public String getFacultyWithMaxName() {
+        return facultyRepository.findAll().stream()
+                .map(Faculty::getName)
+                .max(Comparator.comparing(String::length)).orElseThrow();
+    }
 }

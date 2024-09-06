@@ -52,4 +52,9 @@ public class FacultyController {
     public List<Student> findStudentsByFacultyId(@PathVariable long id) {
         return facultyService.findStudentsByFacultyId(id);
     }
+
+    @GetMapping("/facultyWithMaxName")
+    public String getFacultyWithMaxName() {
+        return facultyService.getFacultyWithMaxName();
+    }
 }

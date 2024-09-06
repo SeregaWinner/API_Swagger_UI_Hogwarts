@@ -94,7 +94,21 @@ public class StudentController {
                 .contentLength(data.length)
                 .contentType(MediaType.parseMediaType(pair.getSecond()))
                 .body(data);
+    }
 
+    @GetMapping("/allStudentWithNameOnLetterA")
+    public List<String> getAllStudentWithNameOnLetterA() {
+        return studentService.getAllStudentWithNameOnLetterA();
+    }
+
+    @GetMapping("/ageMediumAllStudent")
+    public double getAgeMediumAllStudent() {
+        return studentService.getAgeMediumAllStudent();
+    }
+
+    @GetMapping("/numberTypeInt")
+    public long getNumberTypeInt() {
+        return studentService.getNumberTypeInt();
     }
 
 }
