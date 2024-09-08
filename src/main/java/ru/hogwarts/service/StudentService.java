@@ -140,9 +140,13 @@ public class StudentService {
     }
 
     public long getNumberTypeInt() {
-        return Stream.iterate(1, a -> a + 1)
+        long startTime = System.currentTimeMillis();
+        int sum = Stream.iterate(1, a -> a + 1)
                 .limit(1_000_000)
                 .parallel()
                 .reduce(0, (a, b) -> a + b);
+        long finishTime = System.currentTimeMillis();
+        logger.info("Option 1: " + (finishTime - startTime) + " ms.");
+        return sum;
     }
 }
